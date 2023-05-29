@@ -13,6 +13,12 @@ jobs:
         name: Checkout
         uses: actions/checkout@v3
       -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: jamboubou/flask_event_api
+      -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       -
@@ -30,4 +36,5 @@ jobs:
         with:
           context: ./events-api
           push: true
-          tags: jamboubou/flask_event_api:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
