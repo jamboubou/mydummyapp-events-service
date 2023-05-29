@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: event-api
-        image: jamboubou/flask_event_api:latest
+        image: jamboubou/flask_event_api:main
         imagePullPolicy: "Always"
         ports:
         - containerPort: 80
