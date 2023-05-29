@@ -17,7 +17,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: jamboubou/flask_event_api
+          images: jamboubou/flask_event_api:latest
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
