@@ -3,6 +3,9 @@ from app import app
 from config import mysql
 from flask import jsonify
 from flask import flash, request
+from ddtrace.runtime import RuntimeMetrics
+RuntimeMetrics.enable()
+
 
 @app.route('/create', methods=['POST'])
 def create_event():
