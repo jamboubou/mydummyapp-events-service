@@ -1,4 +1,4 @@
-import pymysql
+from psycopg2.extras import RealDictCursor
 from app import app
 import psycopg2
 from flask import jsonify
@@ -23,7 +23,7 @@ def create_event():
         _type = _json['type']	
         if _name and _description and _location and _type and request.method == 'POST':
             conn = get_db_connection()
-            cursor = conn.cursor(pymysql.cursors.DictCursor)		
+            cursor = conn.cursor(cursor_factory=RealDictCursor)		
             sqlQuery = "INSERT INTO event(name, description, location, type) VALUES(%s, %s, %s, %s)"
             bindData = (_name, _description, _location, _type)            
             cursor.execute(sqlQuery, bindData)
@@ -43,7 +43,7 @@ def create_event():
 def event():
     try:
         conn = get_db_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute("SELECT id, name, description, location, type FROM event")
         eventRows = cursor.fetchall()
         respone = jsonify(eventRows)
@@ -59,7 +59,7 @@ def event():
 def event_details(event_id):
     try:
         conn = get_db_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute("SELECT id, name, description, location, type FROM event WHERE id =%s", event_id)
         eventRow = cursor.fetchone()
         respone = jsonify(eventRow)
