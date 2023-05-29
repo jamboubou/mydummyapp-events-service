@@ -1,0 +1,6 @@
+memo-command
+events-api/bin
+events-api/lib
+events-api/include
+events-api/pyvenv.cfg
+*.sql

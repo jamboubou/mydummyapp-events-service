@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-api-deployment
+  labels:
+    app: event-api
+    tags.datadoghq.com/env: "prod"
+    tags.datadoghq.com/service: "event-api"
+    tags.datadoghq.com/version: "1.0"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: event-api
+  template:
+    metadata:
+      labels:
+        app: event-api
+        tags.datadoghq.com/env: "prod"
+        tags.datadoghq.com/service: "event-api"
+        tags.datadoghq.com/version: "1.0"
+        admission.datadoghq.com/enabled: "true"
+        admission.datadoghq.com/python-lib.version: "latest"
+    spec:
+      containers:
+      - name: event-api
+        image: jamboubou/flask_event_api:latest
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 80
