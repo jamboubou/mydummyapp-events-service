@@ -1,11 +1,16 @@
-import pymysql
 from app import app
-from config import mysql
+import psycopg2
 from flask import jsonify
 from flask import flash, request
 from ddtrace.runtime import RuntimeMetrics
 RuntimeMetrics.enable()
 
+def get_db_connection():
+    conn = psycopg2.connect(host='10.0.111.192',
+                            database='events',
+                            user='eventapp',
+                            password='CyberArk123')
+    return conn
 
 @app.route('/create', methods=['POST'])
 def create_event():
@@ -16,8 +21,8 @@ def create_event():
         _location = _json['location']
         _type = _json['type']	
         if _name and _description and _location and _type and request.method == 'POST':
-            conn = mysql.connect()
-            cursor = conn.cursor(pymysql.cursors.DictCursor)		
+            conn = get_db_connection()
+            cursor = conn.cursor()		
             sqlQuery = "INSERT INTO event(name, description, location, type) VALUES(%s, %s, %s, %s)"
             bindData = (_name, _description, _location, _type)            
             cursor.execute(sqlQuery, bindData)
@@ -36,8 +41,8 @@ def create_event():
 @app.route('/event')
 def event():
     try:
-        conn = mysql.connect()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        conn = get_db_connection()
+        cursor = conn.cursor()
         cursor.execute("SELECT id, name, description, location, type FROM event")
         eventRows = cursor.fetchall()
         respone = jsonify(eventRows)
@@ -52,8 +57,8 @@ def event():
 @app.route('/event/')
 def event_details(event_id):
     try:
-        conn = mysql.connect()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        conn = get_db_connection()
+        cursor = conn.cursor()
         cursor.execute("SELECT id, name, description, location, type FROM event WHERE id =%s", event_id)
         eventRow = cursor.fetchone()
         respone = jsonify(eventRow)
@@ -77,7 +82,7 @@ def update_event():
         if _name and _description and _location and _type and _id and request.method == 'PUT':			
             sqlQuery = "UPDATE event SET name=%s, description=%s, location=%s, type=%s WHERE id=%s"
             bindData = (_name, _description, _location, _type, _id,)
-            conn = mysql.connect()
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(sqlQuery, bindData)
             conn.commit()
@@ -95,7 +100,7 @@ def update_event():
 @app.route('/delete/', methods=['DELETE'])
 def delete_event(id):
 	try:
-		conn = mysql.connect()
+		conn = get_db_connection()
 		cursor = conn.cursor()
 		cursor.execute("DELETE FROM event WHERE id =%s", (id,))
 		conn.commit()

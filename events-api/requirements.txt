@@ -19,6 +19,7 @@ MarkupSafe==2.1.2
 opentelemetry-api==1.18.0
 packaging==23.1
 protobuf==4.23.2
+psycopg2-binary==2.9.6
 PyMySQL==1.0.3
 pyrsistent==0.19.3
 six==1.16.0
