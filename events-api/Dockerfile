@@ -12,7 +12,6 @@ RUN pip install -r requirements.txt
 
 # copy app files
 COPY ./app.py /app/app.py
-COPY ./config.py /app/config.py
 COPY ./main.py /app/main.py
 
 # configure the container to run in an executed manner
