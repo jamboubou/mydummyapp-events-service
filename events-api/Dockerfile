@@ -15,5 +15,5 @@ COPY ./app.py /app/app.py
 COPY ./main.py /app/main.py
 
 # configure the container to run in an executed manner
-
+ENV DD_DBM_PROPAGATION_MODE=full
 CMD ["ddtrace-run", "python", "main.py"]
